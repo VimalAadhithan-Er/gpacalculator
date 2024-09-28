@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 450px;
+            text-align: center;
+        }
+        h1 {
+            color: #4a7c59;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+            text-align: left;
+        }
+        select, button {
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border: 1px solid #d1d8e0;
+            transition: all 0.3s ease;
+        }
+        select:focus, button:focus {
+            outline: none;
+            border-color: #4a7c59;
+            box-shadow: 0 0 5px rgba(74, 124, 89, 0.5);
+        }
+        button {
+            background-color: #4a7c59;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #5cae8b;
+        }
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #4a7c59;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 1.5s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Result Pop-Up */
+        .result-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            text-align: center;
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+        }
+        .result-popup.show {
+            display: block;
+            opacity: 1;
+        }
+        /* Result Text Style */
+        .result {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #4a7c59;
+        }
+        /* Tick Mark Animation */
+        .tick-mark {
+            display: none;
+            width: 60px;
+            height: 60px;
+            margin-top: 20px;
+            fill: #4a7c59; /* Attractive color */
+        }
+        /* Footer Text */
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+        }
+        /* Responsive Design */
+        @media (max-width: 500px) {
+            .container {
+                width: 90%;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            button {
+                font-size: 14px;
+            }
+            .loader {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>GPA Calculator</h1>
+
+        <label for="course1">EC3401 Networks and Security (4 Credits)</label>
+        <select id="course1">
+            <option value="10">O</option>
+            <option value="9">A+</option>
+            <option value="8">A</option>
+            <option value="7">B+</option>
+            <option value="6">B</option>
+            <option value="5">C</option>
+        </select>
+
+        <label for="course2">EC3451 Linear Integrated Circuits (3 Credits)</label>
+        <select id="course2">
+            <option value="10">O</option>
+            <option value="9">A+</option>
+            <option value="8">A</option>
+            <option value="7">B+</option>
+            <option value="6">B</option>
+            <option value="5">C</option>
+        </select>
+
+        <label for="course3">EC3452 Electromagnetic Fields (3 Credits)</label>
+        <select id="course3">
+            <option value="10">O</option>
+            <option value="9">A+</option>
+            <option value="8">A</option>
+            <option value="7">B+</option>
+            <option value="6">B</option>
+            <option value="5">C</option>
+        </select>
+
+        <label for="course4">EC3462 Communication Systems Lab (1.5 Credits)</label>
+        <select id="course4">
+            <option value="10">O</option>
+            <option value="9">A+</option>
+            <option value="8">A</option>
+            <option value="7">B+</option>
+            <option value="6">B</option>
+            <option value="5">C</option>
+        </select>
+
+        <label for="course5">EC3461 Linear Integrated Circuits Lab (1.5 Credits)</label>
+        <select id="course5">
+            <option value="10">O</option>
+            <option value="9">A+</option>
+            <option value="8">A</option>
+            <option value="7">B+</option>
+            <option value="6">B</option>
+            <option value="5">C</option>
+        </select>
+
+        <label for="course6">EC3491 Communication Systems (3 Credits)</label>
+        <select id="course6">
+            <option value="10">O</option>
+            <option value="9">A+</option>
+            <option value="8">A</option>
+            <option value="7">B+</option>
+            <option value="6">B</option>
+            <option value="5">C</option>
+        </select>
+
+        <label for="course7">EC3492 Digital Signal Processing (4 Credits)</label>
+        <select id="course7">
+            <option value="10">O</option>
+            <option value="9">A+</option>
+            <option value="8">A</option>
+            <option value="7">B+</option>
+            <option value="6">B</option>
+            <option value="5">C</option>
+        </select>
+
+        <label for="course8">GE3451 Environmental Sciences (2 Credits)</label>
+        <select id="course8">
+            <option value="10">O</option>
+            <option value="9">A+</option>
+            <option value="8">A</option>
+            <option value="7">B+</option>
+            <option value="6">B</option>
+            <option value="5">C</option>
+        </select>
+
+        <label for="course9">NM1022 Naan Mudhalvan (3 Credits)</label>
+        <select id="course9">
+            <option value="10">O</option>
+            <option value="9">A+</option>
+            <option value="8">A</option>
+            <option value="7">B+</option>
+            <option value="6">B</option>
+            <option value="5">C</option>
+        </select>
+
+        <button onclick="calculateGPA()">Calculate GPA</button>
+        
+        <!-- Loading Screen -->
+        <div class="loading-screen" id="loading-screen">
+            <div class="loader"></div>
+        </div>
+
+        <!-- Result Pop-Up -->
+        <div class="result-popup" id="result-popup">
+            <svg class="tick-mark" id="tick-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M9 19l-7-7 1.41-1.41L9 16.17l12.59-12.59L24 6l-15 15z" />
+            </svg>
+            <h2>GPA Calculation Complete!</h2>
+            <p class="result" id="result"></p>
+            <button onclick="closePopup()">Close</button>
+        </div>
+
+        <p class="footer">Designed by Vimal Aadhithan</p>
+    </div>
+
+    <script>
+        function calculateGPA() {
+            const loadingScreen = document.getElementById("loading-screen");
+            const resultDiv = document.getElementById("result");
+            const resultPopup = document.getElementById("result-popup");
+            const tickMark = document.getElementById("tick-mark");
+
+            loadingScreen.style.display = "flex";
+            tickMark.style.display = "none"; // Hide tick mark initially
+
+            setTimeout(() => {
+                let totalWeightedGradePoints = 0;
+                let totalCredits = 0;
+                const courseCredits = [4, 3, 3, 1.5, 1.5, 3, 4, 2, 3];
+
+                for (let i = 1; i <= 9; i++) {
+                    const grade = parseFloat(document.getElementById('course' + i).value);
+                    const credits = courseCredits[i - 1];
+                    totalWeightedGradePoints += grade * credits;
+                    totalCredits += credits;
+                }
+
+                const GPA = totalWeightedGradePoints / totalCredits;
+
+                // Show the tick mark
+                tickMark.style.display = "block";
+                tickMark.animate([
+                    { transform: 'scale(0)', opacity: 0 },
+                    { transform: 'scale(1)', opacity: 1 }
+                ], {
+                    duration: 300, // Decreased delay time
+                    fill: 'forwards'
+                });
+
+                setTimeout(() => {
+                    // Hide the loading screen
+                    loadingScreen.style.display = "none";
+
+                    // Show result in the pop-up
+                    resultDiv.innerHTML = "Your GPA is: " + GPA.toFixed(2);
+                    resultPopup.classList.add("show");
+                    resultPopup.style.display = "block"; // Show the result popup
+                }, 300); // Delay to show tick mark before hiding loading
+            }, 1000); // Simulate a 1-second loading delay
+        }
+
+        function closePopup() {
+            const resultPopup = document.getElementById("result-popup");
+            resultPopup.style.display = "none"; // Hide the popup
+        }
+    </script>
+</body>
+</html>
